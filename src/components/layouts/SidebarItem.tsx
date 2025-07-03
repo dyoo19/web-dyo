@@ -16,6 +16,7 @@ import {
 interface Props {
   label: string;
   path: string;
+  icon?: React.JSX.Element;
   leftIcon?: React.JSX.Element;
   rightIcon?: React.JSX.Element;
 }
@@ -25,6 +26,7 @@ export default function SidebarItem({
   path,
   leftIcon,
   rightIcon,
+  icon,
 }: Props) {
   const { expanded } = useSidebarContext((state) => state);
   const router = useRouter();
@@ -36,14 +38,15 @@ export default function SidebarItem({
         <Link href={path} passHref>
           <li
             className={cn(
-              "flex h-10 cursor-pointer items-center justify-between px-3 py-2 text-[#A91D43] hover:rounded-[0.375rem] hover:bg-merah-primary hover:text-white",
+              "flex h-12 cursor-pointer items-center justify-between px-3 py-2 text-[#A91D43] hover:rounded-[0.375rem] hover:bg-merah-primary hover:text-white",
               isActive
-                ? "rounded-[0.375rem] bg-white font-bold text-[#A91D43]"
+                ? "rounded-[0.375rem] bg-merah-primary font-bold text-white"
                 : "",
             )}
           >
             <div className="flex items-center gap-2">
               {leftIcon && <span>{leftIcon}</span>}
+              {icon && <span>{icon}</span>}
               <span className={cn("whitespace-nowrap", !expanded && "hidden")}>
                 {label}
               </span>

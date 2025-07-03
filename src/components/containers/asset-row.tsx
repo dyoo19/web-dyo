@@ -212,10 +212,6 @@ export function useColumns(): ColumnDef<any>[] {
         );
       },
     },
-    {
-      id: "actions",
-      cell: ({ row }) => <DataTableRowActions row={row} />,
-    },
   ];
 }
 

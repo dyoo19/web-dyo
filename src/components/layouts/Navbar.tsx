@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, LifeBuoy, LogOut, User, Users } from "lucide-react";
+import {
+  CarFront,
+  ChevronDown,
+  LifeBuoy,
+  LogOut,
+  User,
+  Users,
+} from "lucide-react";
 import { useQuery } from "react-query";
 
 import Logo from "@/../public/logo jivaloka no bg.svg";
@@ -46,7 +53,8 @@ const Navbar = () => {
     <div className="w-full p-5">
       <div className="flex justify-between gap-4 rounded-xl bg-white px-6 py-4 shadow-xl">
         <div className="flex items-center gap-4">
-          <Image src={Logo} alt="logo" width={40} height={50} />
+          {/* <Image src={Logo} alt="logo" width={40} height={50} /> */}
+          <CarFront size={50} color="#A91D43" />
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-[#A91D43]">Jambar</h1>
           </div>
