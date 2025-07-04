@@ -18,8 +18,12 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "contents.mediadecathlon.com"
-      }
+        hostname: "contents.mediadecathlon.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.redd.it",
+      },
     ],
   },
   async rewrites() {

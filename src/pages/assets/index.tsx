@@ -38,8 +38,7 @@ const data = [
       "https://contents.mediadecathlon.com/p2562212/k$360dae6eb34868d23a943f08a0285ea6/skuter-mid-1-anak-anak-biru-galaxy-oxelo-8817672.jpg?f=1920x0&format=auto",
     status: "Broken",
     buyer: "-",
-    attachment:
-      "https://contents.mediadecathlon.com/p2562212/k$360dae6eb34868d23a943f08a0285ea6/skuter-mid-1-anak-anak-biru-galaxy-oxelo-8817672.jpg?f=1920x0&format=auto",
+    attachment: "https://i.redd.it/gyt0jc3yxvmb1.jpg",
   },
 ];
 

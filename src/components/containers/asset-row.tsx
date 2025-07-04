@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -45,6 +46,15 @@ export function useColumns(): ColumnDef<any>[] {
       header: () => {
         return (
           <div className="text-sm font-semibold text-black">Vehicle Name</div>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center gap-2 text-sm font-semibold text-black">
+            <Link href={`/assets/${row.getValue("id")}`}>
+              {row.getValue("name")}
+            </Link>
+          </div>
         );
       },
     },
