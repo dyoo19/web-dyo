@@ -17,15 +17,19 @@ import {
 export interface AssetActionDropdownProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onEdit: () => void;
+  generateQr: () => void;
   onDelete: () => void;
+  downloadQR: () => void;
+  isGenerated: boolean;
 }
 
 export default function AssetActionDropdown({
   isOpen,
   onOpenChange,
-  onEdit,
+  generateQr,
   onDelete,
+  downloadQR,
+  isGenerated,
 }: AssetActionDropdownProps) {
   return (
     <DropdownMenu open={isOpen} onOpenChange={onOpenChange}>
@@ -39,7 +43,11 @@ export default function AssetActionDropdown({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem onClick={onEdit}>Edit Asset</DropdownMenuItem>
+        {isGenerated ? (
+          <DropdownMenuItem onClick={downloadQR}>Download QR</DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem onClick={generateQr}>Generate QR</DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
       </DropdownMenuContent>

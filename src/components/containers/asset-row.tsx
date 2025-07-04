@@ -5,28 +5,34 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import QRCode from "qrcode";
 import { createPortal } from "react-dom";
 
 import AssetActionDropdown from "@/components/containers/AssetActionDropdown";
 import DeleteTable from "@/data/Delete/DeleteAsset";
 import { ShadCNDialog } from "@/data/Update/AssetEdit";
+import { data } from "@/utils/data";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type AssetProps = {
   id: string;
-  assetName: string;
-  model: string;
-  category: string;
-  status: "Ready to Deploy" | "Archived" | "Pending" | "Broken" | "Lost";
-  CheckOut: string;
-  isDeployed: boolean;
-  assetImg: string;
+  name: string;
+  image: string;
+  status: string;
+  buyer: string;
+  attachment: string;
+  qrCode: string;
 };
 
-// Columns definition for the DataTable
-export function useColumns(): ColumnDef<any>[] {
+export function useColumns({
+  assets,
+  setAssets,
+}: any): ColumnDef<AssetProps>[] {
+  const handleQrUpdate = (id: string, qrCode: string) => {
+    setAssets((prev: any) =>
+      prev.map((item: any) => (item.id === id ? { ...item, qrCode } : item)),
+    );
+  };
+
   return [
     {
       accessorKey: "id",
@@ -55,6 +61,68 @@ export function useColumns(): ColumnDef<any>[] {
               {row.getValue("name")}
             </Link>
           </div>
+        );
+      },
+    },
+    {
+      accessorKey: "qrCode",
+      header: () => {
+        return (
+          <div className="flex text-sm font-semibold text-black">QR Code</div>
+        );
+      },
+      cell: ({ row }) => {
+        const [isModalOpen, setIsModalOpen] = useState(false);
+        const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+        const handleImageClick = (imgUrl: string) => {
+          setSelectedImage(imgUrl);
+          setIsModalOpen(true);
+        };
+
+        const closeModal = () => {
+          setIsModalOpen(false);
+          setSelectedImage(null);
+        };
+
+        return (
+          <>
+            {row.getValue("qrCode") === "" ? (
+              <div>-</div>
+            ) : (
+              <>
+                <div className="flex items-center text-sm font-semibold text-black">
+                  <Image
+                    width={20}
+                    height={20}
+                    alt="Asset Gambar"
+                    src={row.getValue("qrCode")}
+                    className="h-[50px] w-[50px] cursor-pointer rounded-full"
+                    onClick={() => handleImageClick(row.getValue("qrCode"))}
+                  />
+                </div>
+                {isModalOpen &&
+                  selectedImage &&
+                  createPortal(
+                    <div
+                      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                      onClick={closeModal}
+                    >
+                      <div className="relative rounded-lg bg-white p-4">
+                        <Image
+                          width={400}
+                          height={400}
+                          src={selectedImage}
+                          alt="Asset Image"
+                          className="h-auto max-w-full"
+                        />
+                      </div>
+                    </div>,
+                    document.body,
+                  )}
+              </>
+            )}
+          </>
         );
       },
     },
@@ -141,13 +209,6 @@ export function useColumns(): ColumnDef<any>[] {
               }`}
             />
             {status}{" "}
-            {row.original.isDeployed && (
-              <div className="flex h-3 w-[57px] items-center rounded-[2px] bg-[#FFE9EF] shadow-[0px_1px_2px_0px_#00000040]">
-                <p className="bg-merah-primary bg-clip-text px-2 text-[8px] font-bold text-transparent">
-                  Deployed
-                </p>
-              </div>
-            )}
           </div>
         );
       },
@@ -222,27 +283,61 @@ export function useColumns(): ColumnDef<any>[] {
         );
       },
     },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <DataTableRowActions
+          onQrGenerated={(qr) => handleQrUpdate(row.original.id, qr)}
+          row={row}
+        />
+      ),
+    },
   ];
 }
 
 // DataTableRowActions component
 interface DataTableRowActionsProps {
   row: { original: AssetProps };
+  onQrGenerated?: (qrCode: string) => void;
 }
 
-export default function DataTableRowActions({ row }: DataTableRowActionsProps) {
+export default function DataTableRowActions({
+  row,
+  onQrGenerated,
+}: DataTableRowActionsProps) {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [qrImage, setQrImage] = React.useState<string>("");
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false);
     setIsDrawerOpen(false);
   };
 
-  const handleEditAsset = () => {
-    setIsDialogOpen(true);
-    setIsDropdownOpen(false);
+  const generateQR = async () => {
+    const qr = await QRCode.toDataURL(
+      `http://192.168.1.245:3000/assets/${row.original.id}`,
+    );
+    setQrImage(qr);
+
+    if (onQrGenerated) {
+      onQrGenerated(qr);
+    }
+  };
+
+  const downloadQR = () => {
+    const qr = row.original.qrCode;
+
+    if (!qr) {
+      alert("Please generate the QR code first.");
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = qr;
+    link.download = `QR_${row.original.name || row.original.id}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleDeleteAsset = () => {
@@ -255,13 +350,10 @@ export default function DataTableRowActions({ row }: DataTableRowActionsProps) {
       <AssetActionDropdown
         isOpen={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
-        onEdit={handleEditAsset}
+        generateQr={generateQR}
         onDelete={handleDeleteAsset}
-      />
-      <ShadCNDialog
-        isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
-        assetID={row.original.id}
+        downloadQR={downloadQR}
+        isGenerated={row.original.qrCode === "" ? false : true}
       />
       <DeleteTable
         isOpen={isDrawerOpen}

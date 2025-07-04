@@ -34,34 +34,36 @@ export default function DashboardLayout({ children }: Props) {
     <div className="min-w-screen relative flex min-h-screen flex-col">
       <Navbar />
 
-      <div className="pt- ml-5 flex">
-        <Sidebar>
-          {menus.map((menu) => {
-            // if (menu.roles !== "*" && Array.isArray(menu.roles)) {
-            //   return null;
-            // }
+      <div className="pt- flex sm:ml-5">
+        <div className="hidden sm:block">
+          <Sidebar>
+            {menus.map((menu) => {
+              // if (menu.roles !== "*" && Array.isArray(menu.roles)) {
+              //   return null;
+              // }
 
-            // if (menu.subMenus?.length) {
-            //   return (
-            //     <SidebarItemWithSubMenu
-            //       key={menu.id}
-            //       id={menu.id}
-            //       label={menu.label}
-            //       path={menu.path}
-            //       subMenus={menu.subMenus}
-            //     />
-            //   );
-            // }
-            return (
-              <SidebarItem
-                icon={menu.Icon}
-                key={menu.id}
-                label={menu.label}
-                path={menu.path}
-              />
-            );
-          })}
-        </Sidebar>
+              // if (menu.subMenus?.length) {
+              //   return (
+              //     <SidebarItemWithSubMenu
+              //       key={menu.id}
+              //       id={menu.id}
+              //       label={menu.label}
+              //       path={menu.path}
+              //       subMenus={menu.subMenus}
+              //     />
+              //   );
+              // }
+              return (
+                <SidebarItem
+                  icon={menu.Icon}
+                  key={menu.id}
+                  label={menu.label}
+                  path={menu.path}
+                />
+              );
+            })}
+          </Sidebar>
+        </div>
         {/* Content */}
         <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-hidden p-5">
           {children}
