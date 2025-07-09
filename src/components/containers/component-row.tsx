@@ -41,12 +41,12 @@ export default function DataTableRowActions({ row }: DataTableRowActionsProps) {
 
   return (
     <>
-      <AssetActionDropdown
+      {/* <AssetActionDropdown
         isOpen={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         onEdit={handleEditAsset}
         onDelete={handleDeleteAsset}
-      />
+      /> */}
 
       <ComponentEdit
         isOpen={isDialogOpen}

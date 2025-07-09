@@ -6,13 +6,9 @@ import AssetActionDropdown from "@/components/containers/AssetActionDropdown";
 import DeleteTable from "@/data/Delete/DeleteAsset";
 import { AccesoriesEdit } from "@/data/Update/AccesoriesEdit";
 
-import { AccesoriesProps } from "@/pages/accesories/index";
+interface DataTableRowActionsProps {}
 
-interface DataTableRowActionsProps {
-  row: { original: AccesoriesProps };
-}
-
-export default function DataTableRowActions({ row }: DataTableRowActionsProps) {
+export default function DataTableRowActions({ row }: any) {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
@@ -34,12 +30,12 @@ export default function DataTableRowActions({ row }: DataTableRowActionsProps) {
 
   return (
     <>
-      <AssetActionDropdown
+      {/* <AssetActionDropdown
         isOpen={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         onEdit={handleEditAsset}
         onDelete={handleDeleteAsset}
-      />
+      /> */}
 
       <AccesoriesEdit
         isOpen={isDialogOpen}
