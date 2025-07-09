@@ -26,7 +26,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       <Head>
-        <title>Solivex</title>
+        <title>Jambar</title>
         <meta
           name="description"
           content="Integrated Smart Solutions  or Modern Students, Optimizing Learning and Productivity with Cutting-edge Technology."
