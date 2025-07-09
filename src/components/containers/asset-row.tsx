@@ -315,7 +315,7 @@ export default function DataTableRowActions({
 
   const generateQR = async () => {
     const qr = await QRCode.toDataURL(
-      `http://192.168.1.245:3000/assets/${row.original.id}`,
+      `https://jambar-silk.vercel.app/assets/${row.original.id}`,
     );
     setQrImage(qr);
 
